@@ -30,7 +30,7 @@ export default function Home() {
       <div className="min-h-screen bg-background">
         <header className="border-b border-border bg-card">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-primary">Aura-Match</h1>
+            <h1 className="text-2xl font-bold text-primary">CarreerPilot</h1>
             <Button variant="outline" onClick={handleLogout}>
               Logout
             </Button>
@@ -46,12 +46,12 @@ export default function Home() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-blue-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-xl">PM</span>
+            <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-xl">CP</span>
             </div>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-blue-600 bg-clip-text text-transparent mb-2">
-            AI InternShip Portal
+          <h1 className="text-4xl font-bold text-foreground mb-2">
+            CarreerPilot
           </h1>
           <p className="text-slate-600 text-balance">Empowering Youth Through Government-Backed Internships</p>
           <p className="text-sm text-slate-500 mt-2">Part of Digital India Initiative</p>

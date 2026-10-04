@@ -20,11 +20,11 @@ function LogoWithFallback({ company, logo }: { company: string; logo: string }) 
   const [err, setErr] = useState(false)
   const initials = company.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase()
   return (
-    <div className="h-12 w-12 rounded-lg overflow-hidden bg-[oklch(0.14_0.03_264)] flex-shrink-0 border border-[oklch(0.25_0.06_265/0.5)] flex items-center justify-center">
+    <div className="h-12 w-12 rounded-lg overflow-hidden bg-muted flex-shrink-0 border border-border flex items-center justify-center">
       {!err ? (
         <img src={logo} alt={`${company} logo`} className="h-full w-full object-contain p-1" onError={() => setErr(true)} />
       ) : (
-        <span className="text-[oklch(0.75_0.20_265)] font-bold text-sm">{initials}</span>
+        <span className="text-primary font-bold text-sm">{initials}</span>
       )}
     </div>
   )
@@ -35,8 +35,8 @@ export function LikedInternships({ internships, onBack, onUnlike }: LikedInterns
     return (
       <div className="min-h-screen bg-neon-gradient flex flex-col items-center justify-center p-6">
         <div className="text-center space-y-4 max-w-sm">
-          <div className="w-20 h-20 rounded-full bg-[oklch(0.68_0.24_265/0.1)] border border-[oklch(0.68_0.24_265/0.2)] flex items-center justify-center mx-auto">
-            <Heart className="h-10 w-10 text-[oklch(0.68_0.24_265/0.5)]" />
+          <div className="w-20 h-20 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto">
+            <Heart className="h-10 w-10 text-primary" />
           </div>
           <h2 className="text-xl font-semibold text-foreground">No Liked Internships Yet</h2>
           <p className="text-muted-foreground text-sm">Swipe right on internships you're interested in to save them here.</p>
@@ -54,14 +54,14 @@ export function LikedInternships({ internships, onBack, onUnlike }: LikedInterns
   return (
     <div className="min-h-screen bg-neon-gradient">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-[oklch(0.07_0.025_264/0.95)] backdrop-blur-md border-b border-[oklch(0.25_0.06_265/0.4)]">
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-md border-b border-border">
         <div className="container mx-auto px-4 py-4 max-w-3xl">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="sm" onClick={onBack} className="text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-4 w-4" />
             </Button>
             <div className="flex items-center gap-3 flex-1">
-              <Heart className="h-5 w-5 text-[oklch(0.68_0.24_265)]" />
+              <Heart className="h-5 w-5 text-primary" />
               <h1 className="text-lg font-semibold">Liked Internships</h1>
               <span className="neon-badge">{internships.length} saved</span>
             </div>
@@ -74,8 +74,8 @@ export function LikedInternships({ internships, onBack, onUnlike }: LikedInterns
         {pmScheme.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Award className="h-4 w-4 text-[oklch(0.82_0.18_50)]" />
-              <h2 className="text-sm font-semibold text-[oklch(0.82_0.18_50)] uppercase tracking-wider">
+              <Award className="h-4 w-4 text-amber-700" />
+              <h2 className="text-sm font-semibold text-amber-800 uppercase tracking-wider">
                 Government Backed — PM Scheme ({pmScheme.length})
               </h2>
               <div className="flex-1 neon-divider ml-2" />
@@ -92,8 +92,8 @@ export function LikedInternships({ internships, onBack, onUnlike }: LikedInterns
         {private_.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Building className="h-4 w-4 text-[oklch(0.75_0.22_265)]" />
-              <h2 className="text-sm font-semibold text-[oklch(0.75_0.22_265)] uppercase tracking-wider">
+              <Building className="h-4 w-4 text-primary" />
+              <h2 className="text-sm font-semibold text-primary uppercase tracking-wider">
                 Private Companies ({private_.length})
               </h2>
               <div className="flex-1 neon-divider ml-2" />
@@ -144,11 +144,11 @@ function InternshipRow({ internship, onUnlike }: { internship: Internship; onUnl
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
           {/* Logo */}
-          <div className="h-12 w-12 rounded-lg overflow-hidden bg-[oklch(0.14_0.03_264)] flex-shrink-0 border border-[oklch(0.25_0.06_265/0.4)] flex items-center justify-center">
+          <div className="h-12 w-12 rounded-lg overflow-hidden bg-muted flex-shrink-0 border border-border flex items-center justify-center">
             {!err ? (
               <img src={internship.logo} alt={internship.company} className="h-full w-full object-contain p-1" onError={() => setErr(true)} />
             ) : (
-              <span className="text-[oklch(0.75_0.20_265)] font-bold text-sm">{initials}</span>
+              <span className="text-primary font-bold text-sm">{initials}</span>
             )}
           </div>
 
@@ -157,7 +157,7 @@ function InternshipRow({ internship, onUnlike }: { internship: Internship; onUnl
             <div className="flex items-start justify-between mb-1">
               <div>
                 <h3 className="font-semibold text-foreground text-sm leading-tight">{internship.title}</h3>
-                <p className="text-[oklch(0.68_0.24_265)] text-sm font-medium">{internship.company}</p>
+                <p className="text-primary text-sm font-medium">{internship.company}</p>
               </div>
               <div className="flex items-center gap-2 ml-2 flex-shrink-0">
                 {internship.scheme && (
@@ -181,7 +181,7 @@ function InternshipRow({ internship, onUnlike }: { internship: Internship; onUnl
                 <Clock className="h-3 w-3" />
                 {internship.duration}
               </span>
-              <span className="flex items-center gap-1 text-[oklch(0.78_0.18_150)]">
+              <span className="flex items-center gap-1 text-emerald-700">
                 <IndianRupee className="h-3 w-3" />
                 {internship.salary}
               </span>
@@ -199,7 +199,7 @@ function InternshipRow({ internship, onUnlike }: { internship: Internship; onUnl
               <Button
                 size="sm"
                 variant="ghost"
-                className="h-7 text-xs text-muted-foreground hover:text-[oklch(0.78_0.20_25)] hover:bg-[oklch(0.65_0.22_25/0.08)]"
+                className="h-7 text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                 onClick={() => onUnlike(internship.id)}
               >
                 <Trash2 className="h-3 w-3 mr-1" />

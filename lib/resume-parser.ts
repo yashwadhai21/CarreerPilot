@@ -1,6 +1,5 @@
 /**
- * Resume Parser — Enhanced heuristic NLP analysis, no external APIs
- * Fixed: stateful regex bug (gi flags), B.Tech detection, full college name extraction
+ * Resume Parser — Enhanced heuristic NLP analysis,
  */
 
 import type { AnalysisResult } from "./types"
@@ -67,8 +66,7 @@ const ALL_SKILLS = Object.values(SKILL_CATEGORIES).flat()
 
 // ─── Education Patterns (stateless — use i flag only, not gi to avoid lastIndex bug) ─────
 
-// NOTE: We use RegExp constructor at call-site to avoid the stateful `gi` regex bug.
-// All patterns stored as strings, compiled fresh per call.
+
 const EDUCATION_PATTERN_DEFS: Array<{ pattern: string; flags: string; level: string }> = [
   // Ph.D must come before M.Tech/B.Tech to avoid subset matches
   { pattern: "phd|ph\\.d\\.|doctor\\s+of\\s+philosophy|doctoral", flags: "i", level: "Ph.D" },
@@ -295,6 +293,7 @@ function computeBaseScore(
   exp: ReturnType<typeof extractExperience>,
   text: string,
 ): number {
+  //Score = (Skills × 40%) + (Education × 25%) + (Experience × 25%) + (Quality × 10%)
   let score = 0
   score += Math.min(100, (skills.length / 15) * 100) * 0.4
   score += edu.score * 0.25

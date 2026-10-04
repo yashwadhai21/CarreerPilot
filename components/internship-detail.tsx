@@ -106,7 +106,7 @@ export function InternshipDetail({ internship, onBack, onApply, userSkills = [] 
   return (
     <div className="min-h-screen bg-neon-gradient">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-[oklch(0.07_0.025_264/0.95)] backdrop-blur-md border-b border-[oklch(0.25_0.06_265/0.4)]">
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-md border-b border-border">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="sm" onClick={onBack} className="text-muted-foreground hover:text-foreground">
@@ -142,7 +142,7 @@ export function InternshipDetail({ internship, onBack, onApply, userSkills = [] 
 
               <div className="flex-1">
                 <CardTitle className="text-2xl mb-2 text-balance text-foreground">{internship.title}</CardTitle>
-                <p className="text-lg text-[oklch(0.70_0.22_265)] font-semibold mb-2">{internship.company}</p>
+                <p className="text-lg text-primary font-semibold mb-2">{internship.company}</p>
                 <div className="flex gap-2 mb-3">
                   <span className="neon-badge">{internship.type}</span>
                   {internship.sector && (
@@ -157,40 +157,40 @@ export function InternshipDetail({ internship, onBack, onApply, userSkills = [] 
             {/* Info grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div className="flex items-center gap-2 text-sm">
-                <MapPin className="h-4 w-4 text-[oklch(0.68_0.24_265/0.7)]" />
+                <MapPin className="h-4 w-4 text-primary" />
                 <span className="text-muted-foreground">{internship.location}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <Clock className="h-4 w-4 text-[oklch(0.68_0.24_265/0.7)]" />
+                <Clock className="h-4 w-4 text-primary" />
                 <span className="text-muted-foreground">{internship.duration}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <IndianRupee className="h-4 w-4 text-[oklch(0.78_0.18_150/0.8)]" />
-                <span className="text-[oklch(0.78_0.18_150)] font-medium">{internship.salary}</span>
+                <IndianRupee className="h-4 w-4 text-emerald-700" />
+                <span className="text-emerald-700 font-medium">{internship.salary}</span>
               </div>
             </div>
 
             {internship.scheme && (
-              <div className="mb-6 p-4 bg-[oklch(0.72_0.20_150/0.07)] border border-[oklch(0.72_0.20_150/0.25)] rounded-xl">
-                <h3 className="text-base font-semibold mb-3 text-[oklch(0.78_0.18_150)] flex items-center gap-2">
+              <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+                <h3 className="text-base font-semibold mb-3 text-emerald-800 flex items-center gap-2">
                   <CheckCircle className="h-5 w-5" />
                   Government Benefits
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                   <div className="flex items-center gap-2 text-muted-foreground">
-                    <IndianRupee className="h-4 w-4 text-[oklch(0.78_0.18_150)]" />
+                    <IndianRupee className="h-4 w-4 text-emerald-700" />
                     <span>₹5,000 monthly allowance</span>
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
-                    <Award className="h-4 w-4 text-[oklch(0.78_0.18_150)]" />
+                    <Award className="h-4 w-4 text-emerald-700" />
                     <span>Government certificate</span>
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
-                    <Users className="h-4 w-4 text-[oklch(0.78_0.18_150)]" />
+                    <Users className="h-4 w-4 text-emerald-700" />
                     <span>Skill development training</span>
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4 text-[oklch(0.78_0.18_150)]" />
+                    <Calendar className="h-4 w-4 text-emerald-700" />
                     <span>12-month guaranteed duration</span>
                   </div>
                 </div>
@@ -210,7 +210,7 @@ export function InternshipDetail({ internship, onBack, onApply, userSkills = [] 
                 {requirements.map((req, index) => (
                   <span
                     key={index}
-                    className="text-xs px-2.5 py-1 rounded-lg bg-[oklch(0.14_0.03_264)] border border-[oklch(0.25_0.06_265/0.3)] text-muted-foreground"
+                    className="text-xs px-2.5 py-1 rounded-lg bg-muted border border-border text-foreground"
                   >
                     {req}
                   </span>
@@ -219,9 +219,9 @@ export function InternshipDetail({ internship, onBack, onApply, userSkills = [] 
             </div>
 
             {/* ── PER-INTERNSHIP SKILL GAP ANALYSIS ─────────────────────────────── */}
-            <div className="mb-6 p-4 bg-[oklch(0.10_0.025_264/0.6)] border border-[oklch(0.25_0.06_265/0.4)] rounded-xl">
+            <div className="mb-6 p-4 bg-muted/80 border border-border rounded-xl">
               <div className="flex items-center gap-2 mb-4">
-                <Target className="h-5 w-5 text-[oklch(0.75_0.22_265)]" />
+                <Target className="h-5 w-5 text-primary" />
                 <h3 className="text-base font-semibold text-foreground">Skill Gap Analysis</h3>
                 {hasResume && (
                   <span className="ml-auto text-xs neon-badge">{matchPct}% match</span>
@@ -236,16 +236,16 @@ export function InternshipDetail({ internship, onBack, onApply, userSkills = [] 
                       <span>Your fit for this role</span>
                       <span>{matchedSkills.length} / {requirements.length} requirements met</span>
                     </div>
-                    <div className="h-2 rounded-full bg-[oklch(0.15_0.04_264)] overflow-hidden">
+                    <div className="h-2 rounded-full bg-muted overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all duration-700"
                         style={{
                           width: `${matchPct}%`,
                           background: matchPct >= 70
-                            ? "oklch(0.72 0.20 150)"
+                            ? "#047857"
                             : matchPct >= 40
-                            ? "oklch(0.75 0.22 60)"
-                            : "oklch(0.72 0.20 25)",
+                            ? "#b45309"
+                            : "#b91c1c",
                         }}
                       />
                     </div>
@@ -254,14 +254,14 @@ export function InternshipDetail({ internship, onBack, onApply, userSkills = [] 
                   <div className="grid grid-cols-1 gap-3">
                     {/* Matched skills */}
                     {matchedSkills.length > 0 && (
-                      <div className="p-3 bg-[oklch(0.72_0.20_150/0.08)] border border-[oklch(0.72_0.20_150/0.3)] rounded-lg">
-                        <h4 className="text-xs font-semibold text-[oklch(0.78_0.18_150)] mb-2 flex items-center gap-1.5">
+                      <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                        <h4 className="text-xs font-semibold text-emerald-800 mb-2 flex items-center gap-1.5">
                           <CheckCircle className="h-3.5 w-3.5" />
                           You already have ({matchedSkills.length})
                         </h4>
                         <div className="flex flex-wrap gap-1.5">
                           {matchedSkills.map((skill, i) => (
-                            <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-[oklch(0.72_0.20_150/0.15)] border border-[oklch(0.72_0.20_150/0.4)] text-[oklch(0.82_0.18_150)]">
+                            <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-800">
                               ✓ {skill}
                             </span>
                           ))}
@@ -271,14 +271,14 @@ export function InternshipDetail({ internship, onBack, onApply, userSkills = [] 
 
                     {/* Skills to learn */}
                     {skillsToLearn.length > 0 && (
-                      <div className="p-3 bg-[oklch(0.72_0.20_50/0.08)] border border-[oklch(0.72_0.20_50/0.3)] rounded-lg">
-                        <h4 className="text-xs font-semibold text-[oklch(0.82_0.18_50)] mb-2 flex items-center gap-1.5">
+                      <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                        <h4 className="text-xs font-semibold text-amber-800 mb-2 flex items-center gap-1.5">
                           <XCircle className="h-3.5 w-3.5" />
                           Skills to develop ({skillsToLearn.length})
                         </h4>
                         <div className="flex flex-wrap gap-1.5">
                           {skillsToLearn.map((skill, i) => (
-                            <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-[oklch(0.72_0.20_50/0.12)] border border-[oklch(0.72_0.20_50/0.35)] text-[oklch(0.88_0.18_50)]">
+                            <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 border border-amber-200 text-amber-800">
                               + {skill}
                             </span>
                           ))}
@@ -288,14 +288,14 @@ export function InternshipDetail({ internship, onBack, onApply, userSkills = [] 
 
                     {/* Bonus skills */}
                     {bonusSkills.length > 0 && (
-                      <div className="p-3 bg-[oklch(0.68_0.24_265/0.06)] border border-[oklch(0.68_0.24_265/0.25)] rounded-lg">
-                        <h4 className="text-xs font-semibold text-[oklch(0.75_0.22_265)] mb-2 flex items-center gap-1.5">
+                      <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <h4 className="text-xs font-semibold text-blue-800 mb-2 flex items-center gap-1.5">
                           <Award className="h-3.5 w-3.5" />
                           Extra skills you bring ({bonusSkills.length})
                         </h4>
                         <div className="flex flex-wrap gap-1.5">
                           {bonusSkills.slice(0, 6).map((skill, i) => (
-                            <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-[oklch(0.68_0.24_265/0.12)] border border-[oklch(0.68_0.24_265/0.3)] text-[oklch(0.80_0.22_265)]">
+                            <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 border border-blue-200 text-blue-800">
                               ★ {skill}
                             </span>
                           ))}
@@ -331,7 +331,7 @@ export function InternshipDetail({ internship, onBack, onApply, userSkills = [] 
               {internship.applyLink && (
                 <Button
                   variant="outline"
-                  className="flex items-center gap-2 border-[oklch(0.25_0.06_265/0.5)] text-muted-foreground hover:text-foreground bg-transparent"
+                  className="flex items-center gap-2 border-border text-foreground hover:bg-accent bg-card"
                   onClick={() => window.open(internship.applyLink, "_blank")}
                 >
                   <ExternalLink className="h-4 w-4" />
@@ -350,14 +350,14 @@ export function InternshipDetail({ internship, onBack, onApply, userSkills = [] 
             </CardHeader>
             <CardContent>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2"><span className="text-[oklch(0.68_0.24_265)] mt-0.5">▸</span>Hands-on experience with industry-standard tools and technologies</li>
-                <li className="flex items-start gap-2"><span className="text-[oklch(0.68_0.24_265)] mt-0.5">▸</span>Direct mentorship from senior professionals and government liaisons</li>
-                <li className="flex items-start gap-2"><span className="text-[oklch(0.68_0.24_265)] mt-0.5">▸</span>Real-world project experience contributing to national development</li>
-                <li className="flex items-start gap-2"><span className="text-[oklch(0.68_0.24_265)] mt-0.5">▸</span>Professional networking with government and industry leaders</li>
+                <li className="flex items-start gap-2"><span className="text-primary mt-0.5">▸</span>Hands-on experience with industry-standard tools and technologies</li>
+                <li className="flex items-start gap-2"><span className="text-primary mt-0.5">▸</span>Direct mentorship from senior professionals and government liaisons</li>
+                <li className="flex items-start gap-2"><span className="text-primary mt-0.5">▸</span>Real-world project experience contributing to national development</li>
+                <li className="flex items-start gap-2"><span className="text-primary mt-0.5">▸</span>Professional networking with government and industry leaders</li>
                 {internship.scheme && (
                   <>
-                    <li className="flex items-start gap-2"><span className="text-[oklch(0.82_0.18_50)] mt-0.5">▸</span>Understanding of government digital initiatives and policies</li>
-                    <li className="flex items-start gap-2"><span className="text-[oklch(0.82_0.18_50)] mt-0.5">▸</span>Certification recognized by Government of India</li>
+                    <li className="flex items-start gap-2"><span className="text-amber-700 mt-0.5">▸</span>Understanding of government digital initiatives and policies</li>
+                    <li className="flex items-start gap-2"><span className="text-amber-700 mt-0.5">▸</span>Certification recognized by Government of India</li>
                   </>
                 )}
               </ul>

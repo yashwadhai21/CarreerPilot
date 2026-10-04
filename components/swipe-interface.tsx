@@ -181,8 +181,8 @@ export function SwipeInterface() {
     <div className="min-h-screen bg-neon-gradient flex items-center justify-center">
       <div className="text-center space-y-4">
         <div className="relative">
-          <div className="w-16 h-16 rounded-full border border-[oklch(0.68_0.24_265/0.3)] bg-[oklch(0.68_0.24_265/0.08)] flex items-center justify-center mx-auto">
-            <Loader2 className="h-8 w-8 text-[oklch(0.75_0.22_265)] animate-spin" />
+          <div className="w-16 h-16 rounded-full border border-primary/30 bg-primary/10 flex items-center justify-center mx-auto">
+            <Loader2 className="h-8 w-8 text-primary animate-spin" />
           </div>
         </div>
         <p className="text-foreground font-semibold">Loading internships...</p>
@@ -195,7 +195,7 @@ export function SwipeInterface() {
   if (error) return (
     <div className="min-h-screen bg-neon-gradient flex items-center justify-center">
       <div className="text-center space-y-4 max-w-sm mx-auto px-4">
-        <AlertCircle className="h-12 w-12 text-[oklch(0.78_0.20_25)] mx-auto" />
+        <AlertCircle className="h-12 w-12 text-destructive mx-auto" />
         <p className="text-foreground font-medium">{error}</p>
         <Button onClick={() => window.location.reload()} className="neon-btn">Retry</Button>
       </div>
@@ -209,8 +209,8 @@ export function SwipeInterface() {
         <div className="flex items-center justify-between mb-3 neon-card rounded-2xl p-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-8 h-8 bg-gradient-to-br from-[oklch(0.72_0.20_50)] to-[oklch(0.68_0.24_265)] rounded-full flex items-center justify-center shadow-[0_0_12px_oklch(0.68_0.24_265/0.4)]">
-                <span className="text-white font-bold text-xs">PM</span>
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-xs">CP</span>
               </div>
               <h2 className="text-base font-semibold text-foreground">Discover Internships</h2>
             </div>
@@ -225,15 +225,15 @@ export function SwipeInterface() {
           </div>
           <div className="flex gap-1.5">
             <Button variant="ghost" size="sm" onClick={() => setShowAIRecommendations(true)}
-              className="flex items-center gap-1 text-xs h-8 px-2 text-[oklch(0.75_0.22_265)] hover:bg-[oklch(0.68_0.24_265/0.1)] hover:text-[oklch(0.82_0.22_265)]">
+              className="flex items-center gap-1 text-xs h-8 px-2 text-primary hover:bg-accent hover:text-primary">
               <Sparkles className="h-3.5 w-3.5" />AI
             </Button>
             <Button variant="ghost" size="sm" onClick={() => setShowCourseRecommendations(true)}
-              className="flex items-center gap-1 text-xs h-8 px-2 text-[oklch(0.78_0.18_150)] hover:bg-[oklch(0.72_0.20_150/0.1)] hover:text-[oklch(0.82_0.18_150)]">
+              className="flex items-center gap-1 text-xs h-8 px-2 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800">
               <BookOpen className="h-3.5 w-3.5" />Courses
             </Button>
             <Button variant="ghost" size="sm" onClick={() => setShowResumeAnalyzer(true)}
-              className="flex items-center gap-1 text-xs h-8 px-2 text-[oklch(0.82_0.18_50)] hover:bg-[oklch(0.72_0.20_50/0.1)] hover:text-[oklch(0.88_0.18_50)]">
+              className="flex items-center gap-1 text-xs h-8 px-2 text-amber-700 hover:bg-amber-50 hover:text-amber-800">
               <FileText className="h-3.5 w-3.5" />Resume
             </Button>
           </div>
@@ -245,15 +245,15 @@ export function SwipeInterface() {
             onClick={handleToggleLive}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-300 ${
               fetchMode === "live"
-                ? "bg-[oklch(0.65_0.22_25/0.15)] border-[oklch(0.78_0.20_25/0.6)] text-[oklch(0.88_0.20_25)] shadow-[0_0_8px_oklch(0.65_0.22_25/0.3)]"
-                : "bg-transparent border-[oklch(0.25_0.06_265/0.4)] text-muted-foreground hover:border-[oklch(0.65_0.22_25/0.4)] hover:text-[oklch(0.78_0.20_25)]"
+                ? "bg-red-50 border-red-300 text-red-700"
+                : "bg-card border-border text-muted-foreground hover:border-red-300 hover:text-red-700"
             }`}
           >
             {fetchMode === "live" ? (
               <>
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[oklch(0.78_0.20_25)] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[oklch(0.78_0.20_25)]" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600" />
                 </span>
                 LIVE
               </>
@@ -270,17 +270,17 @@ export function SwipeInterface() {
             <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
               {isCached && <span className="opacity-60">(cached)</span>}
               {(sourceStats.github ?? 0) > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full bg-[oklch(0.68_0.24_265/0.15)] border border-[oklch(0.68_0.24_265/0.3)] text-[oklch(0.75_0.22_265)]">
-                  🔵 GitHub {sourceStats.github}
+                <span className="px-1.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800">
+                  GitHub {sourceStats.github}
                 </span>
               )}
               {(sourceStats.remoteok ?? 0) > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full bg-[oklch(0.72_0.20_50/0.12)] border border-[oklch(0.72_0.20_50/0.3)] text-[oklch(0.82_0.18_50)]">
-                  🟠 Remote {sourceStats.remoteok}
+                <span className="px-1.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-orange-800">
+                  Remote {sourceStats.remoteok}
                 </span>
               )}
               {(sourceStats.remotive ?? sourceStats.jooble ?? 0) > 0 && (
-                <span className="px-1.5 py-0.5 rounded-full bg-[oklch(0.72_0.20_150/0.12)] border border-[oklch(0.72_0.20_150/0.3)] text-[oklch(0.78_0.18_150)]">
+                <span className="px-1.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800">
                   🟣 Remotive {sourceStats.remotive ?? sourceStats.jooble}
                 </span>
               )}
@@ -315,8 +315,8 @@ export function SwipeInterface() {
           {Math.abs(dragOffset.x) > 50 && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
               <div className={`px-6 py-3 rounded-full font-bold text-lg ${dragOffset.x > 0
-                ? "bg-[oklch(0.72_0.20_150/0.2)] border-2 border-[oklch(0.78_0.18_150)] text-[oklch(0.82_0.18_150)]"
-                : "bg-[oklch(0.65_0.22_25/0.2)] border-2 border-[oklch(0.78_0.20_25)] text-[oklch(0.82_0.20_25)]"} backdrop-blur-sm`}>
+                ? "bg-emerald-50 border-2 border-emerald-600 text-emerald-800"
+                : "bg-red-50 border-2 border-red-600 text-red-800"} backdrop-blur-sm`}>
                 {dragOffset.x > 0 ? "💚 LIKE" : "✕ PASS"}
               </div>
             </div>
@@ -326,21 +326,21 @@ export function SwipeInterface() {
         {/* Action buttons */}
         <div className="flex items-center justify-center gap-5 mb-4">
           <Button variant="ghost" size="lg"
-            className="rounded-full h-14 w-14 border border-[oklch(0.65_0.22_25/0.3)] hover:bg-[oklch(0.65_0.22_25/0.1)] hover:border-[oklch(0.78_0.20_25/0.5)] bg-[oklch(0.10_0.025_264)] shadow-[0_0_12px_oklch(0.65_0.22_25/0.1)] transition-all duration-200"
+            className="rounded-full h-14 w-14 border border-red-200 hover:bg-red-50 hover:border-red-400 bg-card transition-all duration-200"
             onClick={() => handleSwipe("left")}>
-            <X className="h-6 w-6 text-[oklch(0.78_0.20_25)]" />
+            <X className="h-6 w-6 text-red-600" />
           </Button>
 
           <Button variant="ghost" size="lg"
-            className="rounded-full h-11 w-11 border border-[oklch(0.25_0.06_265/0.3)] hover:bg-[oklch(0.68_0.24_265/0.08)] bg-[oklch(0.10_0.025_264)] transition-all duration-200"
+            className="rounded-full h-11 w-11 border border-border hover:bg-accent bg-card transition-all duration-200"
             onClick={() => { setCurrentIndex(0); setLikedInternships([]) }}>
             <RotateCcw className="h-4 w-4 text-muted-foreground" />
           </Button>
 
           <Button variant="ghost" size="lg"
-            className="rounded-full h-14 w-14 border border-[oklch(0.72_0.20_150/0.3)] hover:bg-[oklch(0.72_0.20_150/0.1)] hover:border-[oklch(0.78_0.18_150/0.5)] bg-[oklch(0.10_0.025_264)] shadow-[0_0_12px_oklch(0.72_0.20_150/0.1)] transition-all duration-200"
+            className="rounded-full h-14 w-14 border border-emerald-200 hover:bg-emerald-50 hover:border-emerald-400 bg-card transition-all duration-200"
             onClick={() => handleSwipe("right")}>
-            <Heart className="h-6 w-6 text-[oklch(0.78_0.18_150)]" />
+            <Heart className="h-6 w-6 text-emerald-700" />
           </Button>
         </div>
 
@@ -359,11 +359,11 @@ export function SwipeInterface() {
         {likedInternships.length > 0 ? (
           <button
             onClick={() => setShowLiked(true)}
-            className="w-full flex items-center justify-between px-5 py-3.5 rounded-2xl neon-card group hover:border-[oklch(0.68_0.24_265/0.4)] transition-all duration-200"
+            className="w-full flex items-center justify-between px-5 py-3.5 rounded-2xl neon-card group hover:border-primary/40 transition-all duration-200"
           >
             <div className="flex items-center gap-3">
               <div className="relative">
-                <Heart className="h-5 w-5 text-[oklch(0.78_0.18_150)]" fill="oklch(0.78 0.18 150)" />
+                <Heart className="h-5 w-5 text-emerald-700" fill="currentColor" />
               </div>
               <div className="text-left">
                 <p className="text-sm font-semibold text-foreground">
@@ -378,7 +378,7 @@ export function SwipeInterface() {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs neon-badge">View all</span>
-              <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-[oklch(0.75_0.22_265)] transition-colors" />
+              <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
             </div>
           </button>
         ) : (

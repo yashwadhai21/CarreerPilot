@@ -74,7 +74,7 @@ export function InternshipCard({ internship, onViewDetails, swipeDirection, drag
         <div className="p-5 pb-3">
           <div className="flex items-center gap-4 mb-3">
             {/* Logo with fallback */}
-            <div className="relative h-14 w-14 rounded-xl overflow-hidden bg-[oklch(0.14_0.03_264)] flex-shrink-0 border border-[oklch(0.25_0.06_265/0.4)] flex items-center justify-center">
+            <div className="relative h-14 w-14 rounded-xl overflow-hidden bg-muted flex-shrink-0 border border-border flex items-center justify-center">
               {!imgError ? (
                 <img
                   src={internship.logo}
@@ -83,13 +83,13 @@ export function InternshipCard({ internship, onViewDetails, swipeDirection, drag
                   onError={() => setImgError(true)}
                 />
               ) : (
-                <span className="text-[oklch(0.75_0.20_265)] font-bold text-lg">{initials}</span>
+                <span className="text-primary font-bold text-lg">{initials}</span>
               )}
             </div>
 
             <div className="flex-1 min-w-0">
               <h3 className="text-lg font-bold text-foreground leading-tight text-balance">{internship.title}</h3>
-              <p className="text-[oklch(0.70_0.22_265)] font-semibold text-sm">{internship.company}</p>
+              <p className="text-primary font-semibold text-sm">{internship.company}</p>
               {internship.sector && (
                 <div className="flex items-center gap-1 mt-0.5">
                   <Building className="h-3 w-3 text-muted-foreground" />
@@ -120,16 +120,16 @@ export function InternshipCard({ internship, onViewDetails, swipeDirection, drag
           {/* Info row */}
           <div className="space-y-1.5 mb-3">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <MapPin className="h-3.5 w-3.5 text-[oklch(0.68_0.24_265/0.7)]" />
+              <MapPin className="h-3.5 w-3.5 text-primary" />
               <span>{internship.location}</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Clock className="h-3.5 w-3.5 text-[oklch(0.68_0.24_265/0.7)]" />
+              <Clock className="h-3.5 w-3.5 text-primary" />
               <span>{internship.duration}</span>
             </div>
             <div className="flex items-center gap-2 text-xs">
-              <IndianRupee className="h-3.5 w-3.5 text-[oklch(0.78_0.18_150/0.8)]" />
-              <span className="text-[oklch(0.78_0.18_150)] font-medium">{internship.salary}</span>
+              <IndianRupee className="h-3.5 w-3.5 text-emerald-700" />
+              <span className="text-emerald-700 font-medium">{internship.salary}</span>
               {internship.scheme && (
                 <span className="neon-badge-green text-[10px] ml-1">+ ₹5,000 Govt. Allowance</span>
               )}
@@ -149,12 +149,12 @@ export function InternshipCard({ internship, onViewDetails, swipeDirection, drag
             <h4 className="text-xs font-semibold mb-2 text-foreground/80">Requirements</h4>
             <div className="flex flex-wrap gap-1.5">
               {internship.requirements.slice(0, 4).map((req, index) => (
-                <span key={index} className="text-[10px] px-2 py-0.5 rounded-md bg-[oklch(0.14_0.03_264)] border border-[oklch(0.25_0.06_265/0.3)] text-muted-foreground">
+                <span key={index} className="text-[10px] px-2 py-0.5 rounded-md bg-muted border border-border text-foreground">
                   {req}
                 </span>
               ))}
               {internship.requirements.length > 4 && (
-                <span className="text-[10px] px-2 py-0.5 rounded-md bg-[oklch(0.14_0.03_264)] border border-[oklch(0.25_0.06_265/0.3)] text-muted-foreground">
+                <span className="text-[10px] px-2 py-0.5 rounded-md bg-muted border border-border text-foreground">
                   +{internship.requirements.length - 4} more
                 </span>
               )}
@@ -163,15 +163,15 @@ export function InternshipCard({ internship, onViewDetails, swipeDirection, drag
 
           {/* Skill match bar — dynamic when resume uploaded, hidden otherwise */}
           {hasResume && (
-            <div className="mb-3 p-2.5 rounded-lg bg-[oklch(0.13_0.03_264)] border border-[oklch(0.25_0.06_265/0.2)]">
+            <div className="mb-3 p-2.5 rounded-lg bg-muted border border-border">
               <div className="flex items-center gap-2 mb-1">
-                <Award className="h-3.5 w-3.5 text-[oklch(0.82_0.18_50)]" />
-                <span className="text-xs font-medium text-foreground/80">Skill Match</span>
+                <Award className="h-3.5 w-3.5 text-amber-700" />
+                <span className="text-xs font-medium text-foreground">Skill Match</span>
               </div>
               <div className="flex items-center gap-2 text-[11px]">
-                <span className="text-[oklch(0.78_0.18_150)]">✓ {dynamicMatchedSkills.length} matched</span>
+                <span className="text-emerald-700">✓ {dynamicMatchedSkills.length} matched</span>
                 {dynamicMissingSkills.length > 0 && (
-                  <span className="text-[oklch(0.82_0.18_50)]">· {dynamicMissingSkills.length} to develop</span>
+                  <span className="text-amber-700">· {dynamicMissingSkills.length} to develop</span>
                 )}
               </div>
             </div>
@@ -183,7 +183,7 @@ export function InternshipCard({ internship, onViewDetails, swipeDirection, drag
           <Button
             onClick={onViewDetails}
             variant="ghost"
-            className="w-full h-9 text-sm border border-[oklch(0.25_0.06_265/0.4)] text-[oklch(0.70_0.22_265)] hover:bg-[oklch(0.68_0.24_265/0.08)] hover:border-[oklch(0.68_0.24_265/0.5)] hover:text-[oklch(0.80_0.22_265)] transition-all duration-200 rounded-xl"
+            className="w-full h-9 text-sm border border-border text-primary hover:bg-accent hover:text-primary rounded-xl"
           >
             <Eye className="h-4 w-4 mr-2" />
             View Details

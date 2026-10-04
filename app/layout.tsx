@@ -5,8 +5,8 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'AI Internship Portal',
-  description: 'Created with v0',
+  title: 'CarreerPilot',
+  description: 'Find internships, match your skills, and plan your next career move.',
   generator: 'v0.app',
 }
 

@@ -6,8 +6,8 @@ import { CourseModel } from "../lib/models/Course"
 
 const MONGODB_URI =
   process.env.MONGODB_URI ||
-  process.env.MONGO_URI ||
-  "mongodb+srv://yashwadhai21_db_user:LEHFTHwuKjwe7yur@cluster0.zipu2md.mongodb.net/CareerPilot?retryWrites=true&w=majority"
+  process.env.MONGO_URI 
+  
 
 async function seed() {
   console.log("Connecting to MongoDB Atlas...")

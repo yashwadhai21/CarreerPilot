@@ -1,10 +1,34 @@
 /**
  * realtime-parsers.ts
  * Pure functions to convert raw external source data → Internship[]
- * Handles: GitHub SimplifyJobs README, RemoteOK JSON, Jooble REST
+ * Handles: GitHub SimplifyJobs README, RemoteOK JSON, Jooble REST, Remotive
  */
 
 import type { Internship } from "./types"
+
+export function stableHash(str: string): string {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = (hash << 5) - hash + char
+    hash |= 0
+  }
+  return Math.abs(hash).toString(36)
+}
+
+export function generateExternalId(source: string, company: string, title: string, link = ""): string {
+  const norm = `${company.toLowerCase()}|${title.toLowerCase()}|${link.toLowerCase()}`
+  return `${source}:${stableHash(norm)}`
+}
+
+function stableNumericId(extId: string, base: number): number {
+  let num = 0
+  for (let i = 0; i < extId.length; i++) {
+    num = (num << 5) - num + extId.charCodeAt(i)
+    num |= 0
+  }
+  return base + (Math.abs(num) % 50000)
+}
 
 // ─── Skill keyword map (subset of resume-parser for fast extraction) ──────────
 
@@ -85,7 +109,6 @@ export function parseGitHubMarkdown(markdown: string, maxRows = 30): Internship[
 
   // Find all table rows (lines starting with |)
   const lines = markdown.split("\n")
-  let idCounter = 10000
   let rowCount = 0
 
   for (const line of lines) {
@@ -121,9 +144,12 @@ export function parseGitHubMarkdown(markdown: string, maxRows = 30): Internship[
     if (!company || !role || company.length < 2) continue
 
     const skills = extractSkillsFromText(`${role} ${location}`)
+    const externalId = generateExternalId("github", company, role, applyLink || "")
+    const id = stableNumericId(externalId, 10000)
 
     results.push({
-      id: idCounter++,
+      id,
+      externalId,
       title: role,
       company,
       location: location || "USA",
@@ -148,25 +174,22 @@ export function parseGitHubMarkdown(markdown: string, maxRows = 30): Internship[
   return results
 }
 
-// ─── 2. RemoteOK JSON API Parser ────────────────────────────────────────────
+// ─── 2. RemoteOK API Parser ──────────────────────────────────────────────────
 
 /**
- * Parses RemoteOK /api response.
- * Each job: { position, company, tags[], url, date, description, location }
+ * Parses RemoteOK /api?tag=intern response.
+ * RemoteOK format: [{ ...legal notice... }, { id, epoch, date, company, position, tags, description, url, ... }]
  */
 export function parseRemoteOKJson(jobs: any[], maxRows = 20): Internship[] {
   const results: Internship[] = []
   const now = new Date().toISOString()
-  let idCounter = 11000
 
   for (const job of jobs) {
     if (results.length >= maxRows) break
-    // RemoteOK first element is a legal notice object
-    if (!job.position && !job.id) continue
 
-    const title = job.position || job.title || ""
-    const company = job.company || "Unknown"
-    const location = job.location || "Remote"
+    const title = job.position || ""
+    const company = job.company || "Unknown Company"
+    const location = cleanLocation(job.location || "Remote")
     const tags: string[] = Array.isArray(job.tags) ? job.tags : []
     const description = job.description || ""
 
@@ -174,13 +197,17 @@ export function parseRemoteOKJson(jobs: any[], maxRows = 20): Internship[] {
 
     const textForSkills = `${title} ${tags.join(" ")} ${description}`
     const skills = extractSkillsFromText(textForSkills)
-    // Also add tags that look like skills (short, capitalized)
     for (const tag of tags) {
       if (tag.length <= 20 && !skills.includes(tag)) skills.push(tag)
     }
 
+    const applyLink = job.url || `https://remoteok.com/l/${job.id}`
+    const externalId = generateExternalId("remoteok", company, title, applyLink)
+    const id = stableNumericId(externalId, 20000)
+
     results.push({
-      id: idCounter++,
+      id,
+      externalId,
       title,
       company,
       location: location || "Remote",
@@ -195,7 +222,7 @@ export function parseRemoteOKJson(jobs: any[], maxRows = 20): Internship[] {
       sector: inferSectorFromTitle(title),
       skills: skills.slice(0, 8),
       missingSkills: [],
-      applyLink: job.url || `https://remoteok.com/l/${job.id}`,
+      applyLink,
       postedDate: job.date ? job.date.split("T")[0] : now.split("T")[0],
       source: "remoteok",
       fetchedAt: now,
@@ -214,7 +241,6 @@ export function parseRemoteOKJson(jobs: any[], maxRows = 20): Internship[] {
 export function parseJoobleResponse(jobs: any[], maxRows = 15): Internship[] {
   const results: Internship[] = []
   const now = new Date().toISOString()
-  let idCounter = 12000
 
   for (const job of jobs) {
     if (results.length >= maxRows) break
@@ -227,9 +253,12 @@ export function parseJoobleResponse(jobs: any[], maxRows = 15): Internship[] {
     if (!title || title.length < 3) continue
 
     const skills = extractSkillsFromText(`${title} ${snippet}`)
+    const externalId = generateExternalId("jooble", company, title, job.link || "")
+    const id = stableNumericId(externalId, 30000)
 
     results.push({
-      id: idCounter++,
+      id,
+      externalId,
       title,
       company,
       location: location || "India",
@@ -261,7 +290,6 @@ export function parseJoobleResponse(jobs: any[], maxRows = 15): Internship[] {
 export function parseRemotiveResponse(jobs: any[], maxRows = 15): Internship[] {
   const results: Internship[] = []
   const now = new Date().toISOString()
-  let idCounter = 13000
 
   for (const job of jobs) {
     if (results.length >= maxRows) break
@@ -283,8 +311,13 @@ export function parseRemotiveResponse(jobs: any[], maxRows = 15): Internship[] {
       }
     }
 
+    const applyLink = job.url || ""
+    const externalId = generateExternalId("remotive", company, title, applyLink)
+    const id = stableNumericId(externalId, 40000)
+
     results.push({
-      id: idCounter++,
+      id,
+      externalId,
       title,
       company,
       location: location || "Remote",
@@ -299,9 +332,9 @@ export function parseRemotiveResponse(jobs: any[], maxRows = 15): Internship[] {
       sector: inferSectorFromTitle(title),
       skills: skills.slice(0, 8),
       missingSkills: [],
-      applyLink: job.url,
+      applyLink,
       postedDate: job.publication_date ? job.publication_date.split("T")[0] : now.split("T")[0],
-      source: "jooble" as any, // reuse jooble badge slot; swipe-interface shows 🟢 for jooble
+      source: "jooble" as any,
       fetchedAt: now,
     })
   }
@@ -318,9 +351,8 @@ function inferSectorFromTitle(title: string): string {
   if (/design|ui|ux|figma|graphic/.test(t)) return "Design"
   if (/marketing|seo|social media|content/.test(t)) return "Marketing"
   if (/finance|accounting|banking|investment/.test(t)) return "Finance"
-  if (/product|project|program manager/.test(t)) return "Product Management"
-  if (/devops|cloud|aws|azure|infra|sre/.test(t)) return "Cloud & DevOps"
-  if (/security|cyber|penetration/.test(t)) return "Cybersecurity"
-  if (/research|science/.test(t)) return "Research"
+  if (/business|operations|management|product/.test(t)) return "Management & Business"
+  if (/cyber|security/.test(t)) return "Cybersecurity"
+  if (/cloud|devops|aws|azure/.test(t)) return "Cloud & DevOps"
   return "Technology"
 }

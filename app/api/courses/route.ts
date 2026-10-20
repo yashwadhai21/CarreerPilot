@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import { coursesData } from "@/lib/course-data"
+import { connectDB } from "@/lib/db"
+import { CourseModel } from "@/lib/models/Course"
+import type { CourseRecommendation } from "@/lib/types"
+
+export const dynamic = "force-dynamic"
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,7 +23,37 @@ export async function GET(request: NextRequest) {
       .map((s) => s.trim().toLowerCase())
       .filter(Boolean)
 
-    let courses = [...coursesData]
+    let courses: CourseRecommendation[] = []
+
+    try {
+      await connectDB()
+      const dbCourses = await CourseModel.find().lean()
+      if (dbCourses && dbCourses.length > 0) {
+        courses = dbCourses.map((c) => ({
+          id: c.id,
+          title: c.title,
+          provider: c.provider,
+          platform: c.platform,
+          duration: c.duration,
+          level: c.level,
+          rating: c.rating,
+          students: c.students,
+          skills: c.skills,
+          description: c.description,
+          price: c.price,
+          category: c.category,
+          relevantFor: c.relevantFor,
+          certificate: c.certificate,
+          link: c.link,
+        }))
+      }
+    } catch (e) {
+      console.warn("Could not load courses from MongoDB, using static fallback:", e)
+    }
+
+    if (courses.length === 0) {
+      courses = [...coursesData]
+    }
 
     // Filter by category
     if (category !== "all") {
@@ -36,7 +71,6 @@ export async function GET(request: NextRequest) {
           if (csLower.includes(gap) || gap.includes(csLower)) {
             relevanceScore += 3
           }
-          // Partial match
           if (levenshteinSim(csLower, gap) > 0.75) {
             relevanceScore += 2
           }

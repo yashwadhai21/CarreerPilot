@@ -1,68 +1,192 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { AlertCircle, Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react"
+import { api, ApiError } from "@/lib/api"
+import { toast } from "sonner"
 
 interface LoginFormProps {
-  onLogin: () => void
+  onLogin: (user: any) => void
 }
 
 export function LoginForm({ onLogin }: LoginFormProps) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
+
+  const validate = (): boolean => {
+    const errors: { email?: string; password?: string } = {}
+    if (!email.trim()) {
+      errors.email = "Email address is required"
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      errors.email = "Please enter a valid email address"
+    }
+
+    if (!password) {
+      errors.password = "Password is required"
+    } else if (password.length < 6) {
+      errors.password = "Password must be at least 6 characters"
+    }
+
+    setFieldErrors(errors)
+    return Object.keys(errors).length === 0
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
+
+    if (!validate()) {
+      return
+    }
+
     setIsLoading(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const result = await api.post("/api/auth/login", {
+        email: email.trim(),
+        password,
+      })
 
-    setIsLoading(false)
-    onLogin()
+      if (result.success && result.data) {
+        toast.success("Welcome back!", {
+          description: `Signed in as ${result.data.name || result.data.email}`,
+        })
+        onLogin(result.data)
+      } else {
+        const msg = result.error || "Invalid email or password"
+        setError(msg)
+        toast.error("Sign in failed", { description: msg })
+      }
+    } catch (err: any) {
+      const msg = err instanceof ApiError ? err.message : "Network error. Please try again."
+      setError(msg)
+      toast.error("Sign in failed", { description: msg })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-        <CardDescription>Enter your credentials to access your account</CardDescription>
+    <Card className="w-full surface-card border-border/80 shadow-lg shadow-black/5 dark:shadow-black/20">
+      <CardHeader className="space-y-1.5 pb-4">
+        <CardTitle className="text-2xl font-bold tracking-tight">Welcome back</CardTitle>
+        <CardDescription className="text-muted-foreground text-sm">
+          Enter your credentials to access your CareerPilot account
+        </CardDescription>
       </CardHeader>
       <CardContent>
+        {error && (
+          <div
+            role="alert"
+            className="mb-5 p-3.5 text-sm rounded-xl bg-destructive/10 text-destructive border border-destructive/20 flex items-start gap-2.5 animate-in fade-in-50 duration-200"
+          >
+            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+            <span className="font-medium text-xs sm:text-sm">{error}</span>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+          <div className="space-y-1.5">
+            <Label htmlFor="email" className="text-sm font-semibold text-foreground">
+              Email address
+            </Label>
+            <div className="relative">
+              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+              <Input
+                id="email"
+                type="email"
+                placeholder="name@example.com"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: undefined }))
+                }}
+                required
+                disabled={isLoading}
+                autoComplete="email"
+                className={`pl-10 h-11 bg-card border-border/80 focus-visible:ring-primary ${
+                  fieldErrors.email ? "border-destructive focus-visible:ring-destructive" : ""
+                }`}
+                aria-invalid={!!fieldErrors.email}
+                aria-describedby={fieldErrors.email ? "email-error" : undefined}
+              />
+            </div>
+            {fieldErrors.email && (
+              <p id="email-error" className="text-xs text-destructive font-medium pl-1">
+                {fieldErrors.email}
+              </p>
+            )}
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password" className="text-sm font-semibold text-foreground">
+                Password
+              </Label>
+            </div>
+            <div className="relative">
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value)
+                  if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: undefined }))
+                }}
+                required
+                disabled={isLoading}
+                autoComplete="current-password"
+                className={`pl-10 pr-10 h-11 bg-card border-border/80 focus-visible:ring-primary ${
+                  fieldErrors.password ? "border-destructive focus-visible:ring-destructive" : ""
+                }`}
+                aria-invalid={!!fieldErrors.password}
+                aria-describedby={fieldErrors.password ? "password-error" : undefined}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                tabIndex={0}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+            {fieldErrors.password && (
+              <p id="password-error" className="text-xs text-destructive font-medium pl-1">
+                {fieldErrors.password}
+              </p>
+            )}
           </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Signing in..." : "Sign in"}
+
+          <Button
+            type="submit"
+            className="w-full h-11 font-semibold btn-primary mt-2"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+                <span>Signing in...</span>
+              </>
+            ) : (
+              "Sign in to CarreerPilot"
+            )}
           </Button>
         </form>
       </CardContent>
     </Card>
   )
 }
+

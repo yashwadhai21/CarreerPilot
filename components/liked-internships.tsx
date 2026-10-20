@@ -2,11 +2,20 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
-  ArrowLeft, Heart, MapPin, Clock, IndianRupee, ExternalLink,
-  Building, Trash2, Star, Award
+  ArrowLeft,
+  Heart,
+  MapPin,
+  Clock,
+  IndianRupee,
+  ExternalLink,
+  Building,
+  Trash2,
+  Star,
+  Award,
+  Sparkles,
 } from "lucide-react"
 import type { Internship } from "@/lib/types"
 
@@ -18,13 +27,24 @@ interface LikedInternshipsProps {
 
 function LogoWithFallback({ company, logo }: { company: string; logo: string }) {
   const [err, setErr] = useState(false)
-  const initials = company.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase()
+  const initials = company
+    .split(" ")
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase()
+
   return (
-    <div className="h-12 w-12 rounded-lg overflow-hidden bg-muted flex-shrink-0 border border-border flex items-center justify-center">
+    <div className="h-14 w-14 rounded-2xl overflow-hidden bg-card flex-shrink-0 border border-border shadow-xs flex items-center justify-center p-1.5">
       {!err ? (
-        <img src={logo} alt={`${company} logo`} className="h-full w-full object-contain p-1" onError={() => setErr(true)} />
+        <img
+          src={logo}
+          alt={`${company} logo`}
+          className="h-full w-full object-contain"
+          onError={() => setErr(true)}
+        />
       ) : (
-        <span className="text-primary font-bold text-sm">{initials}</span>
+        <span className="text-primary font-black text-base">{initials}</span>
       )}
     </div>
   )
@@ -33,15 +53,19 @@ function LogoWithFallback({ company, logo }: { company: string; logo: string }) 
 export function LikedInternships({ internships, onBack, onUnlike }: LikedInternshipsProps) {
   if (internships.length === 0) {
     return (
-      <div className="min-h-screen bg-neon-gradient flex flex-col items-center justify-center p-6">
-        <div className="text-center space-y-4 max-w-sm">
-          <div className="w-20 h-20 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto">
-            <Heart className="h-10 w-10 text-primary" />
+      <div className="min-h-screen bg-app-ambient flex flex-col items-center justify-center p-6">
+        <div className="surface-card rounded-3xl p-8 text-center space-y-4 max-w-sm shadow-xl">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto">
+            <Heart className="h-8 w-8 text-primary" />
           </div>
-          <h2 className="text-xl font-semibold text-foreground">No Liked Internships Yet</h2>
-          <p className="text-muted-foreground text-sm">Swipe right on internships you're interested in to save them here.</p>
-          <Button onClick={onBack} className="neon-btn mt-2">
-            Start Swiping
+          <div className="space-y-1.5">
+            <h2 className="text-xl font-bold text-foreground">No Saved Internships Yet</h2>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Swipe right on internships in the deck to save them here for easy comparison and application.
+            </p>
+          </div>
+          <Button onClick={onBack} className="btn-primary w-full h-11 rounded-xl">
+            Start Discovering
           </Button>
         </div>
       </div>
@@ -52,20 +76,35 @@ export function LikedInternships({ internships, onBack, onUnlike }: LikedInterns
   const private_ = internships.filter((i) => !i.scheme)
 
   return (
-    <div className="min-h-screen bg-neon-gradient">
+    <div className="min-h-screen bg-app-ambient text-foreground pb-12">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-md border-b border-border">
-        <div className="container mx-auto px-4 py-4 max-w-3xl">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={onBack} className="text-muted-foreground hover:text-foreground">
+      <div className="sticky top-0 z-20 bg-card/85 backdrop-blur-md border-b border-border shadow-xs">
+        <div className="container mx-auto px-4 py-3 max-w-3xl flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={onBack}
+              className="rounded-xl border-border bg-card/60"
+              aria-label="Back to internships"
+            >
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <div className="flex items-center gap-3 flex-1">
-              <Heart className="h-5 w-5 text-primary" />
-              <h1 className="text-lg font-semibold">Liked Internships</h1>
-              <span className="neon-badge">{internships.length} saved</span>
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-success/15 text-success flex items-center justify-center shrink-0">
+                <Heart className="h-4 w-4 fill-current" />
+              </div>
+              <div>
+                <h1 className="text-base sm:text-lg font-bold text-foreground leading-tight">
+                  Saved Shortlist
+                </h1>
+                <p className="text-xs text-muted-foreground leading-none">
+                  {internships.length} role{internships.length !== 1 ? "s" : ""} shortlisted
+                </p>
+              </div>
             </div>
           </div>
+          <span className="badge-primary text-xs font-bold">{internships.length} Saved</span>
         </div>
       </div>
 
@@ -74,11 +113,11 @@ export function LikedInternships({ internships, onBack, onUnlike }: LikedInterns
         {pmScheme.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Award className="h-4 w-4 text-amber-700" />
-              <h2 className="text-sm font-semibold text-amber-800 uppercase tracking-wider">
-                Government Backed — PM Scheme ({pmScheme.length})
+              <Award className="h-4 w-4 text-accent-foreground" />
+              <h2 className="text-xs font-bold uppercase tracking-wider text-accent-foreground">
+                Government PM Scheme ({pmScheme.length})
               </h2>
-              <div className="flex-1 neon-divider ml-2" />
+              <div className="flex-1 surface-divider ml-2" />
             </div>
             <div className="space-y-3">
               {pmScheme.map((internship) => (
@@ -93,10 +132,10 @@ export function LikedInternships({ internships, onBack, onUnlike }: LikedInterns
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <Building className="h-4 w-4 text-primary" />
-              <h2 className="text-sm font-semibold text-primary uppercase tracking-wider">
-                Private Companies ({private_.length})
+              <h2 className="text-xs font-bold uppercase tracking-wider text-primary">
+                Industry Opportunities ({private_.length})
               </h2>
-              <div className="flex-1 neon-divider ml-2" />
+              <div className="flex-1 surface-divider ml-2" />
             </div>
             <div className="space-y-3">
               {private_.map((internship) => (
@@ -106,65 +145,62 @@ export function LikedInternships({ internships, onBack, onUnlike }: LikedInterns
           </div>
         )}
 
-        {/* Summary banner */}
-        <Card className="neon-card border-0">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-foreground">
-                  Ready to apply? You've shortlisted {internships.length} role{internships.length !== 1 ? "s" : ""}
+        {/* Summary application banner */}
+        <Card className="surface-card rounded-2xl border border-border/80 p-5 shadow-sm">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-bold text-foreground">
+                Ready to submit applications? You've shortlisted {internships.length} role
+                {internships.length !== 1 ? "s" : ""}.
+              </p>
+              {pmScheme.length > 0 && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  {pmScheme.length} role{pmScheme.length !== 1 ? "s" : ""} qualify for the official
+                  ₹5,000/month government allowance.
                 </p>
-                {pmScheme.length > 0 && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {pmScheme.length} role{pmScheme.length !== 1 ? "s" : ""} include ₹5,000/month govt. allowance
-                  </p>
-                )}
-              </div>
-              <Button
-                size="sm"
-                className="neon-btn text-xs"
-                onClick={() => window.open("https://pminternship.mca.gov.in", "_blank")}
-              >
-                Apply on PM Portal
-              </Button>
+              )}
             </div>
-          </CardContent>
+            <Button
+              size="sm"
+              className="btn-primary h-10 px-5 rounded-xl shrink-0 font-bold"
+              onClick={() => window.open("https://pminternship.mca.gov.in", "_blank")}
+            >
+              Apply on PM Portal
+            </Button>
+          </div>
         </Card>
       </div>
     </div>
   )
 }
 
-function InternshipRow({ internship, onUnlike }: { internship: Internship; onUnlike: (id: number) => void }) {
-  const [err, setErr] = useState(false)
-  const initials = internship.company.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase()
-
+function InternshipRow({
+  internship,
+  onUnlike,
+}: {
+  internship: Internship
+  onUnlike: (id: number) => void
+}) {
   return (
-    <Card className="neon-card border-0 group transition-all duration-200">
-      <CardContent className="p-4">
+    <Card className="surface-card surface-card-hover rounded-2xl border border-border/80 shadow-xs transition-all">
+      <CardContent className="p-4 sm:p-5">
         <div className="flex items-start gap-4">
-          {/* Logo */}
-          <div className="h-12 w-12 rounded-lg overflow-hidden bg-muted flex-shrink-0 border border-border flex items-center justify-center">
-            {!err ? (
-              <img src={internship.logo} alt={internship.company} className="h-full w-full object-contain p-1" onError={() => setErr(true)} />
-            ) : (
-              <span className="text-primary font-bold text-sm">{initials}</span>
-            )}
-          </div>
+          <LogoWithFallback company={internship.company} logo={internship.logo} />
 
-          {/* Content */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between mb-1">
+            <div className="flex items-start justify-between gap-2 mb-1.5">
               <div>
-                <h3 className="font-semibold text-foreground text-sm leading-tight">{internship.title}</h3>
-                <p className="text-primary text-sm font-medium">{internship.company}</p>
+                <h3 className="font-bold text-foreground text-sm sm:text-base leading-snug line-clamp-1">
+                  {internship.title}
+                </h3>
+                <p className="text-primary text-xs sm:text-sm font-semibold">{internship.company}</p>
               </div>
-              <div className="flex items-center gap-2 ml-2 flex-shrink-0">
+              <div className="flex items-center gap-1.5 shrink-0">
                 {internship.scheme && (
-                  <span className="neon-badge neon-badge-orange text-xs">PM Scheme</span>
+                  <span className="badge-warning text-[10px] font-bold">PM Scheme</span>
                 )}
                 {internship.matchScore && (
-                  <span className="neon-badge text-xs flex items-center gap-1">
+                  <span className="badge-success text-[10px] font-bold flex items-center gap-1">
                     <Star className="h-2.5 w-2.5" />
                     {internship.matchScore}%
                   </span>
@@ -173,37 +209,37 @@ function InternshipRow({ internship, onUnlike }: { internship: Internship; onUnl
             </div>
 
             <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground mb-3">
-              <span className="flex items-center gap-1">
-                <MapPin className="h-3 w-3" />
+              <span className="flex items-center gap-1 font-medium">
+                <MapPin className="h-3.5 w-3.5 text-primary" />
                 {internship.location}
               </span>
               <span className="flex items-center gap-1">
-                <Clock className="h-3 w-3" />
+                <Clock className="h-3.5 w-3.5 text-primary" />
                 {internship.duration}
               </span>
-              <span className="flex items-center gap-1 text-emerald-700">
-                <IndianRupee className="h-3 w-3" />
+              <span className="flex items-center gap-1 text-success font-bold">
+                <IndianRupee className="h-3.5 w-3.5" />
                 {internship.salary}
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 pt-1">
               <Button
                 size="sm"
-                className="h-7 text-xs neon-btn"
+                className="btn-primary h-8 px-3 text-xs rounded-lg font-semibold flex items-center gap-1.5 cursor-pointer"
                 onClick={() => internship.applyLink && window.open(internship.applyLink, "_blank")}
               >
-                <ExternalLink className="h-3 w-3 mr-1" />
-                Apply Now
+                <ExternalLink className="h-3.5 w-3.5" />
+                <span>Apply Now</span>
               </Button>
               <Button
                 size="sm"
-                variant="ghost"
-                className="h-7 text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                variant="outline"
+                className="h-8 px-3 text-xs rounded-lg border-border text-muted-foreground hover:text-destructive hover:border-destructive/40 hover:bg-destructive/10 transition-colors cursor-pointer"
                 onClick={() => onUnlike(internship.id)}
               >
-                <Trash2 className="h-3 w-3 mr-1" />
-                Remove
+                <Trash2 className="h-3.5 w-3.5 mr-1" />
+                <span>Remove</span>
               </Button>
             </div>
           </div>
@@ -212,3 +248,4 @@ function InternshipRow({ internship, onUnlike }: { internship: Internship; onUnl
     </Card>
   )
 }
+

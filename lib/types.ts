@@ -2,6 +2,7 @@
 
 export interface Internship {
   id: number
+  externalId?: string
   title: string
   company: string
   location: string
